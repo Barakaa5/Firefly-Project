@@ -1,0 +1,17 @@
+.CircularProgressDiv {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+.Alert{
+  margin: auto;
+  margin-top: 30px;
+}
+.DataGridContainer {
+  display: flex;
+  margin-top: 20px;
+  height: 400;
+  &_InnerDiv{
+    flex-grow: 1;
+  }
+}
