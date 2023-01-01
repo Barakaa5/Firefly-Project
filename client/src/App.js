@@ -4,7 +4,7 @@ import Table from "./components/Table";
 
 function App() {
   return (
-    <section style={{margin:"30px"}}>
+    <section style={{ margin: "30px" }}>
       <Header />
       <Table />
     </section>

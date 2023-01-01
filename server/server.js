@@ -2,10 +2,9 @@ const express = require("express");
 const app = express();
 // const movies = require("./movies.json"); // this is the data that I store inside firebase.
 const { db } = require("./firebase/firebase");
-const {sortMovies, fixMoviesIfNecessary } = require("./utils");
+const { sortMovies, fixMoviesIfNecessary } = require("./utils");
 
-
-app.get("/getAllMovies", (req, res) => {
+app.get("/getAllMovies", async (req, res) => {
   const page = parseInt(req.query.page) || 1; // default is 1
   const pageSize = parseInt(req.query.pageSize) || 10; // default is 10
   const sortColumn = ["rank", "title", "year", "director", "actors"].includes(
@@ -17,12 +16,13 @@ app.get("/getAllMovies", (req, res) => {
   const sortDirection = req.query.sortDirection === "desc" ? "desc" : "asc"; // sortDirection needs to be "asc"/"desc" or else it will be set to "asc".
 
   const moviesRef = db.collection("movies");
-  moviesRef.get().then((snapshot) => {
+  try {
+    const snapshot = await moviesRef.get();
     let movies = snapshot?.docs.map((doc) => {
       return doc.data();
     });
     if (!movies.length)
-      return res.status(404).json({ error: "No movies found" });
+      return res.status(400).json({ error: "No movies found" });
 
     movies = fixMoviesIfNecessary(movies); // fix movies array if necessary, add rank, title, year, director, actors properties to each movie object if they are missing or have wrong type
 
@@ -42,7 +42,10 @@ app.get("/getAllMovies", (req, res) => {
       sortColumn,
       sortDirection,
     });
-  });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Something went wrong" }); // HTTP status code 500 is a generic error response
+  }
 });
 
 app.listen(5000, () => {

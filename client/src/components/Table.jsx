@@ -4,7 +4,7 @@ import SearchInput from "../components/SearchInput";
 import styles from "../styles/Table.module.scss";
 
 export default function Table() {
-  const [filterString, setFilterString] = useState("");
+  const [filterString, setFilterString] = useState(""); 
   return (
     <div className={styles.container}>
       <SearchInput setFilterString={setFilterString} />
