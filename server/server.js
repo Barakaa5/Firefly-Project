@@ -7,6 +7,7 @@ const { sortMovies, fixMoviesIfNecessary } = require("./utils");
 app.get("/getAllMovies", async (req, res) => {
   const page = parseInt(req.query.page) || 1; // default is 1
   const pageSize = parseInt(req.query.pageSize) || 10; // default is 10
+
   const sortColumn = ["rank", "title", "year", "director", "actors"].includes(
     req.query.sortColumn
   )
@@ -23,6 +24,11 @@ app.get("/getAllMovies", async (req, res) => {
     });
     if (!movies.length)
       return res.status(400).json({ error: "No movies found" });
+
+    if (page > Math.ceil(movies.length / pageSize))
+      return res.status(400).json({ error: "Invalid page number" });
+    if (pageSize > movies.length)
+      return res.status(400).json({ error: "Invalid page size" });
 
     movies = fixMoviesIfNecessary(movies); // fix movies array if necessary, add rank, title, year, director, actors properties to each movie object if they are missing or have wrong type
 

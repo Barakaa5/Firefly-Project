@@ -30,7 +30,8 @@ const fixMoviesIfNecessary = (movies) => {
   };
 
   return movies.map((movie) => {
-    const { id, rank, title, year, director, actors } = movie;
+    const { id, rank, title, year, director, actors, ...rest } = movie;
+
     return {
       id: id ? id : generateId(), // if id is missing or not a string, then set it to index
       rank: rank ? parseInt(rank) : 0, // if rank is missing or not a number, then set it to 0
@@ -38,6 +39,7 @@ const fixMoviesIfNecessary = (movies) => {
       year: year ? parseInt(year) : 0, // if year is missing or not a number, then set it to 0
       director: director ? director : "",
       actors: fixActors(actors),
+      ...rest,
     };
   });
 };
